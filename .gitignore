@@ -1,32 +1,29 @@
-# Dependencies
+# Dependencies and build output — never commit these (a repo pushed from a
+# generated app carried 31,559 node_modules files without this file).
 node_modules/
-/.pnp
-.pnp.js
+dist/
+build/
+.vite/
+coverage/
+*.tsbuildinfo
 
-# Build output
-/dist
-/build
-
-# Environment variables
+# Secrets: .env holds the app's ByteFlow API key (VITE_BYTEFLOW_API_KEY).
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Logs
+# Logs, editor and OS clutter
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
 
-# Temp files
-.turbo/
-.next/
+# Platform bookkeeping inside the sandbox
+.byteflow/
+
+# Secrets (auto-added by ByteFlow push)
+.env.local
