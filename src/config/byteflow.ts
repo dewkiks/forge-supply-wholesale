@@ -260,7 +260,7 @@ export function registerWorkflowConfigs(configs: Array<Omit<ByteflowConfig, 'api
   // not crash the whole app at import time.
   const list = Array.isArray(configs)
     ? configs
-    : configs && typeof configs === 'object' ? Object.values(configs) : [];
+    : configs && typeof configs === 'object' ? (Object.values(configs) as Array<Omit<ByteflowConfig, 'apiKey' | 'apiUrl' | 'projectId' | 'generationVersion'>>) : [];
   for (const config of list) {
     linkedWorkflows.set(config.workflowId, { ...config,
       apiKey: BYTEFLOW_CONFIG.apiKey, apiUrl: BYTEFLOW_CONFIG.apiUrl,
