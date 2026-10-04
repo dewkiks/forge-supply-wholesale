@@ -1,0 +1,19 @@
+/* Dyad Component Selector Styles */
+
+/* Hover state for elements with dyad-id */
+[data-dyad-id].dyad-hover {
+  outline: 2px dashed #7f22fe !important;
+  outline-offset: 2px !important;
+}
+
+/* Selected state for elements */
+[data-dyad-id].dyad-selected {
+  outline: 2px solid #7f22fe !important;
+  outline-offset: 2px !important;
+  background-color: rgba(127, 34, 254, 0.05) !important;
+}
+
+/* Selection mode cursor */
+.dyad-selection-mode * {
+  cursor: crosshair !important;
+}

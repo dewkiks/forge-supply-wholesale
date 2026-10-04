@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Design system: "Warm Coral & Commerce" — a wholesale/B2B sales page.
+   * Coral primary + orange secondary on a warm near-white base, dark zinc
+   * text. Signature: a hard coral offset shadow on cards/CTAs ("stamped
+   * ticket" feel) instead of soft blur shadows.
+   */
+  :root {
+    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    --font-display: "Manrope", var(--font-sans);
+    --shadow-signature: 5px 5px 0 0 hsl(349 89% 60% / 0.22), 0 1px 2px 0 hsl(240 10% 10% / 0.06);
+
+    --background: 20 45% 98%;
+    --foreground: 240 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+    --primary: 349 89% 60%;
+    --primary-foreground: 356 100% 97%;
+    --secondary: 27 96% 61%;
+    --secondary-foreground: 240 10% 12%;
+    --muted: 356 55% 95%;
+    --muted-foreground: 240 6% 42%;
+    --accent: 27 96% 61%;
+    --accent-foreground: 240 10% 12%;
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 350 35% 89%;
+    --input: 350 35% 89%;
+    --ring: 349 89% 60%;
+    --chart-1: 349 89% 60%;
+    --chart-2: 27 96% 61%;
+    --chart-3: 162 38% 32%;
+    --chart-4: 221 70% 55%;
+    --chart-5: 43 74% 56%;
+    --radius: 0.75rem;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 10% 20%;
+    --sidebar-primary: 349 89% 60%;
+    --sidebar-primary-foreground: 356 100% 97%;
+    --sidebar-accent: 356 55% 95%;
+    --sidebar-accent-foreground: 240 10% 12%;
+    --sidebar-border: 350 35% 89%;
+    --sidebar-ring: 349 89% 60%;
+  }
+
+  .dark {
+    --background: 240 14% 8%;
+    --foreground: 356 60% 96%;
+    --card: 240 12% 11%;
+    --card-foreground: 356 60% 96%;
+    --popover: 240 12% 11%;
+    --popover-foreground: 356 60% 96%;
+    --primary: 349 89% 64%;
+    --primary-foreground: 240 14% 8%;
+    --secondary: 27 90% 58%;
+    --secondary-foreground: 240 14% 8%;
+    --muted: 240 10% 16%;
+    --muted-foreground: 350 20% 70%;
+    --accent: 27 90% 58%;
+    --accent-foreground: 240 14% 8%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 10% 20%;
+    --input: 240 10% 20%;
+    --ring: 349 89% 64%;
+    --chart-1: 349 89% 64%;
+    --chart-2: 27 90% 58%;
+    --chart-3: 162 38% 45%;
+    --chart-4: 221 70% 65%;
+    --chart-5: 43 74% 62%;
+    --sidebar-background: 240 12% 11%;
+    --sidebar-foreground: 356 60% 96%;
+    --sidebar-primary: 349 89% 64%;
+    --sidebar-primary-foreground: 240 14% 8%;
+    --sidebar-accent: 240 10% 16%;
+    --sidebar-accent-foreground: 356 60% 96%;
+    --sidebar-border: 240 10% 20%;
+    --sidebar-ring: 349 89% 64%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    font-weight: 400;
+    margin: 0;
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}

@@ -1,0 +1,92 @@
+import { parse } from "@babel/parser";
+import MagicString from "magic-string";
+import path from "node:path";
+import { walk } from "estree-walker";
+import type { Plugin } from "vite";
+
+const VALID_EXTENSIONS = new Set([".jsx", ".tsx"]);
+
+/**
+ * Vite plugin that injects data-b8f-id and data-b8f-name attributes
+ * into JSX elements for component selection functionality.
+ */
+export default function b8fComponentTagger(): Plugin {
+  return {
+    name: "vite-plugin-b8f-component-tagger",
+    // Run in both dev and production builds for component selection
+    enforce: "pre",
+
+    async transform(code: string, id: string) {
+      try {
+        // Ignore non-jsx files and files inside node_modules
+        if (
+          !VALID_EXTENSIONS.has(path.extname(id)) ||
+          id.includes("node_modules")
+        ) {
+          return null;
+        }
+
+        const ast = parse(code, {
+          sourceType: "module",
+          plugins: ["jsx", "typescript"],
+        });
+
+        const ms = new MagicString(code);
+        const fileRelative = path.relative(process.cwd(), id);
+
+        walk(ast as any, {
+          enter(node: any) {
+            try {
+              if (node.type !== "JSXOpeningElement") return;
+
+              // Extract the tag / component name
+              if (node.name?.type !== "JSXIdentifier") return;
+              const tagName = node.name.name as string;
+              if (!tagName) return;
+
+              // Check whether the tag already has data-b8f-id
+              const alreadyTagged = node.attributes?.some(
+                (attr: any) =>
+                  attr.type === "JSXAttribute" &&
+                  attr.name?.name === "data-b8f-id"
+              );
+              if (alreadyTagged) return;
+
+              // Build the id "relative/file.jsx:line:column"
+              const loc = node.loc?.start;
+              if (!loc) return;
+              const b8fId = `${fileRelative}:${loc.line}:${loc.column}`;
+
+              // Inject the attributes just after the tag name
+              if (node.name.end != null) {
+                ms.appendLeft(
+                  node.name.end,
+                  ` data-b8f-id="${b8fId}" data-b8f-name="${tagName}"`
+                );
+              }
+            } catch (error) {
+              console.warn(
+                `[b8f-tagger] Warning: Failed to process JSX node in ${id}:`,
+                error
+              );
+            }
+          },
+        });
+
+        // If nothing changed bail out.
+        if (ms.toString() === code) return null;
+
+        return {
+          code: ms.toString(),
+          map: ms.generateMap({ hires: true }),
+        };
+      } catch (error) {
+        console.warn(
+          `[b8f-tagger] Warning: Failed to transform ${id}:`,
+          error
+        );
+        return null;
+      }
+    },
+  };
+}
