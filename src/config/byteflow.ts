@@ -115,138 +115,371 @@ export interface ByteflowConfig {
 export const BYTEFLOW_CONFIG: ByteflowConfig = {
   projectId: "4985c041",
   workflowId: "b8F_4nKA6Svfl9Vz3hB3",
-  workflowName: "live",
+  workflowName: "agappe_webchat",
   apiKey: import.meta.env.VITE_BYTEFLOW_API_KEY || '',
   apiUrl: "https://app.byteflow.bot",
   generationVersion: 'v2',
   nodes: [
   {
-    "id": "mcp_agent_1788971702594",
-    "type": "mcp_agent",
-    "name": "Super Agent"
+    "id": "live_agent_trigger_1794199544751",
+    "type": "live_agent_trigger",
+    "name": "Web Agent Trigger"
   },
   {
-    "id": "shopify_mcp_tools_1789040489359",
+    "id": "live_agent_mcp_tools_1794199557499",
     "type": "tools_module",
-    "name": "Shopify MCP"
+    "name": "Web Agent MCP"
   },
   {
-    "id": "manual_trigger_1791060273446",
-    "type": "manual_trigger",
-    "name": "Manual Trigger"
+    "id": "knowledge_base_module_1794199562714",
+    "type": "knowledge_base_module",
+    "name": "Knowledge Base"
+  },
+  {
+    "id": "gmail_mcp_tools_1794327575015",
+    "type": "tools_module",
+    "name": "Gmail MCP"
+  },
+  {
+    "id": "google_sheets_mcp_tools_1794368063615",
+    "type": "tools_module",
+    "name": "Google Sheets MCP"
+  },
+  {
+    "id": "agappe_career_mcp_tools_1794993582613",
+    "type": "tools_module",
+    "name": "Agappe Careers"
+  },
+  {
+    "id": "knowledge_base_module_1795019808324",
+    "type": "knowledge_base_module",
+    "name": "Knowledge Base"
+  },
+  {
+    "id": "flash_agent_1795024077488",
+    "type": "flash_agent",
+    "name": "Flash Agent"
   }
 ],
   edges: [
   {
-    "source": "mcp_agent_1788971702594",
-    "target": "shopify_mcp_tools_1789040489359",
+    "source": "live_agent_trigger_1794199544751",
+    "target": "flash_agent_1795024077488",
+    "sourceHandle": "output",
+    "targetHandle": "input"
+  },
+  {
+    "source": "flash_agent_1795024077488",
+    "target": "live_agent_mcp_tools_1794199557499",
     "sourceHandle": "submodule-output",
     "targetHandle": "input"
   },
   {
-    "source": "manual_trigger_1791060273446",
-    "target": "mcp_agent_1788971702594",
-    "sourceHandle": "output",
+    "source": "flash_agent_1795024077488",
+    "target": "google_sheets_mcp_tools_1794368063615",
+    "sourceHandle": "submodule-output",
+    "targetHandle": "input"
+  },
+  {
+    "source": "flash_agent_1795024077488",
+    "target": "gmail_mcp_tools_1794327575015",
+    "sourceHandle": "submodule-output",
+    "targetHandle": "input"
+  },
+  {
+    "source": "flash_agent_1795024077488",
+    "target": "agappe_career_mcp_tools_1794993582613",
+    "sourceHandle": "submodule-output",
+    "targetHandle": "input"
+  },
+  {
+    "source": "flash_agent_1795024077488",
+    "target": "knowledge_base_module_1794199562714",
+    "sourceHandle": "submodule-output",
+    "targetHandle": "input"
+  },
+  {
+    "source": "flash_agent_1795024077488",
+    "target": "knowledge_base_module_1795019808324",
+    "sourceHandle": "submodule-output",
     "targetHandle": "input"
   }
 ],
   hasChatTrigger: false,
   fileUploadNodes: [],
   inputSchema: {
+  "version": "1.0",
   "fields": [
     {
-      "label": "Super Agent: Prompt",
-      "node_id": "mcp_agent_1788971702594",
-      "field_id": "mcp_agent_1788971702594.prompt",
-      "is_input": false,
-      "required": false,
-      "field_path": "prompt",
-      "field_type": "textarea",
-      "validation": {},
-      "description": "Override prompt for Super Agent",
-      "default_value": "You are the AI Shopping Assistant for a Shopify store. You are a friendly, professional, human-like customer support assistant that helps customers before, during, and after their purchase.\r\n\r\nYour job is to resolve customer queries end-to-end while creating a smooth shopping experience. Always speak conversationally, keep responses concise unless the customer asks for more detail, and maintain a warm, helpful tone.\r\n\r\n## Core Responsibilities\r\n\r\nYou can assist customers with:\r\n\r\n* Order tracking and shipment status.\r\n* Product recommendations and product information.\r\n* Product catalog search and comparisons.\r\n* Returns, refunds, exchanges, and cancellations.\r\n* Order modifications (when allowed by store policy).\r\n* Payments, discounts, gift cards, and coupons.\r\n* Shipping information, delivery timelines, and availability.\r\n* Creating and managing customer support tickets.\r\n* Frequently asked questions about the store and policies.\r\n\r\nBehavior\r\n\r\n* Greet customers naturally and introduce yourself only once.\r\n* Understand the customer's intent before responding.\r\n* Ask for missing information only when necessary (order number, email, phone number, etc.).\r\n* Use connected Shopify tools and MCPs to retrieve live information instead of making assumptions.\r\n* Never invent order statuses, tracking updates, product availability, pricing, or refund information.\r\n* If information is unavailable, say so honestly and offer the next best action.\r\n\r\nCapabilities\r\n\r\n1. Order Tracking\r\n\r\nWhen a customer asks about an order:\r\n\r\n* Request the order number or registered email if needed.\r\n* Retrieve the live order status.\r\n* Provide shipment stage, courier, tracking number, estimated delivery date, and tracking updates.\r\n* If delayed, explain the current status and offer to create a support ticket if needed.\r\n\r\n2. Returns & Refunds\r\n\r\nHelp customers:\r\n\r\n* Check whether an order is eligible for return or exchange.\r\n* Explain the return policy clearly.\r\n* Initiate return or refund workflows through connected tools.\r\n* Inform customers about refund timelines and payment method.\r\n* Provide return instructions and pickup details when available.\r\n\r\n3. Product Support\r\n\r\nAnswer questions about:\r\n\r\n* Product specifications.\r\n* Sizes, colors, materials, compatibility, dimensions, and variants.\r\n* Availability and stock status.\r\n* Pricing and ongoing offers.\r\n* Compare products when requested.\r\n* Recommend products based on customer needs without being overly sales-oriented.\r\n\r\n4. Catalog Assistant\r\n\r\nSearch the Shopify catalog to:\r\n\r\n* Find products matching customer requests.\r\n* Suggest alternatives if an item is unavailable.\r\n* Filter by category, price, color, brand, or collection.\r\n* Highlight key product features.\r\n\r\n5. Customer Support Ticketing\r\n\r\nCreate a ticket whenever:\r\n\r\n* An issue cannot be resolved immediately.\r\n* The customer requests human assistance.\r\n* There is a damaged, missing, or incorrect item.\r\n* Delivery problems require escalation.\r\n\r\nEach ticket should include:\r\n\r\n* Customer name.\r\n* Contact details.\r\n* Order number.\r\n* Issue category.\r\n* Issue summary.\r\n* Priority level.\r\n* Timestamp.\r\n\r\nAfter creating a ticket, provide the ticket ID and explain the expected next steps.\r\n\r\nResponse Guidelines\r\n\r\n* Be empathetic for complaints or delivery issues.\r\n* Never blame the customer.\r\n* Confirm actions before making irreversible changes like cancellations or refunds.\r\n* Keep responses short for voice/video interactions.\r\n* If multiple questions are asked, answer them one by one in a logical order.\r\n\r\nEscalation Rules\r\n\r\nEscalate to a human agent if:\r\n\r\n* The customer requests a human.\r\n* Identity verification fails.\r\n* The issue involves fraud, payment disputes, or account security.\r\n* Backend tools cannot complete the requested action.\r\n* The customer is frustrated after repeated unsuccessful attempts.\r\n\r\nBefore escalating, summarize the conversation so the customer does not need to repeat themselves.\r\n\r\nTool Usage\r\n\r\nAlways use connected Shopify MCPs and available Byteflow connectors for:\r\n\r\n* Order lookup.\r\n* Tracking information.\r\n* Customer profile retrieval.\r\n* Product catalog search.\r\n* Inventory lookup.\r\n* Return/refund initiation.\r\n* Ticket creation.\r\n\r\nNever fabricate tool outputs.\r\n\r\nPersona\r\n\r\nYou are calm, confident, and customer-first. Your goal is to help customers complete their shopping journey quickly while providing accurate information and a premium support experience.\r\n\n"
-    },
-    {
-      "label": "Super Agent: Timeout",
-      "node_id": "mcp_agent_1788971702594",
-      "field_id": "mcp_agent_1788971702594.timeout",
-      "is_input": false,
-      "required": false,
-      "field_path": "timeout",
-      "field_type": "number",
-      "validation": {},
-      "description": "Override timeout for Super Agent",
-      "default_value": 600
-    },
-    {
-      "label": "Super Agent: Connectorid",
-      "node_id": "mcp_agent_1788971702594",
-      "field_id": "mcp_agent_1788971702594.connectorId",
-      "is_input": false,
-      "required": false,
-      "field_path": "connectorId",
+      "field_id": "live_agent_trigger_1794199544751.language",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "language",
       "field_type": "string",
+      "label": "Web Agent Trigger: Language",
+      "description": "Override language for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
       "validation": {},
-      "description": "Override connectorid for Super Agent",
-      "default_value": "shopify_mcp_tools"
+      "is_input": false
     },
     {
-      "label": "Super Agent: Heartbeat Enabled",
-      "node_id": "mcp_agent_1788971702594",
-      "field_id": "mcp_agent_1788971702594.heartbeat_enabled",
-      "is_input": false,
+      "field_id": "live_agent_trigger_1794199544751.avatar_id",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "avatar_id",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Avatar Id",
+      "description": "Override avatar id for Web Agent Trigger",
       "required": false,
-      "field_path": "heartbeat_enabled",
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.tenant_id",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "tenant_id",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Tenant Id",
+      "description": "Override tenant id for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.agent_name",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "agent_name",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Agent Name",
+      "description": "Override agent name for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.embed_code",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "embed_code",
+      "field_type": "textarea",
+      "label": "Web Agent Trigger: Embed Code",
+      "description": "Override embed code for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.widget_url",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "widget_url",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Widget Url",
+      "description": "Override widget url for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.tts_voice_id",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "tts_voice_id",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Tts Voice Id",
+      "description": "Override tts voice id for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.widget_theme",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "widget_theme",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Widget Theme",
+      "description": "Override widget theme for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.enable_avatar",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "enable_avatar",
       "field_type": "boolean",
+      "label": "Web Agent Trigger: Enable Avatar",
+      "description": "Override enable avatar for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
       "validation": {},
-      "description": "Override heartbeat enabled for Super Agent",
-      "default_value": false
+      "is_input": false
     },
     {
-      "label": "Super Agent: Guardrails Enabled",
-      "node_id": "mcp_agent_1788971702594",
-      "field_id": "mcp_agent_1788971702594.guardrails_enabled",
-      "is_input": false,
+      "field_id": "live_agent_trigger_1794199544751.greeting_text",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "greeting_text",
+      "field_type": "textarea",
+      "label": "Web Agent Trigger: Greeting Text",
+      "description": "Override greeting text for Web Agent Trigger",
       "required": false,
-      "field_path": "guardrails_enabled",
-      "field_type": "boolean",
+      "default_value": null,
       "validation": {},
-      "description": "Override guardrails enabled for Super Agent",
-      "default_value": false
+      "is_input": false
     },
     {
-      "label": "Super Agent: System Prompt",
-      "node_id": "mcp_agent_1788971702594",
-      "field_id": "mcp_agent_1788971702594.system_prompt",
-      "is_input": false,
-      "required": false,
+      "field_id": "live_agent_trigger_1794199544751.system_prompt",
+      "node_id": "live_agent_trigger_1794199544751",
       "field_path": "system_prompt",
       "field_type": "textarea",
+      "label": "Web Agent Trigger: System Prompt",
+      "description": "Override system prompt for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
       "validation": {},
-      "description": "Override system prompt for Super Agent",
-      "default_value": ""
+      "is_input": false
     },
     {
-      "label": "Message",
-      "node_id": "manual_trigger_1791060273446",
-      "field_id": "input.message",
-      "is_input": true,
+      "field_id": "live_agent_trigger_1794199544751.trigger_event",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "trigger_event",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Trigger Event",
+      "description": "Override trigger event for Web Agent Trigger",
       "required": false,
-      "field_path": "message",
-      "field_type": "textarea",
+      "default_value": null,
       "validation": {},
-      "description": "Input message for the workflow",
-      "default_value": null
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.provision_hash",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "provision_hash",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Provision Hash",
+      "description": "Override provision hash for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.lead_webhook_url",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "lead_webhook_url",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Lead Webhook Url",
+      "description": "Override lead webhook url for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.knowledge_base_id",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "knowledge_base_id",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Knowledge Base Id",
+      "description": "Override knowledge base id for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.avatar_preview_url",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "avatar_preview_url",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Avatar Preview Url",
+      "description": "Override avatar preview url for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "live_agent_trigger_1794199544751.widget_accent_color",
+      "node_id": "live_agent_trigger_1794199544751",
+      "field_path": "widget_accent_color",
+      "field_type": "string",
+      "label": "Web Agent Trigger: Widget Accent Color",
+      "description": "Override widget accent color for Web Agent Trigger",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "flash_agent_1795024077488.prompt",
+      "node_id": "flash_agent_1795024077488",
+      "field_path": "prompt",
+      "field_type": "textarea",
+      "label": "Flash Agent: Prompt",
+      "description": "Override prompt for Flash Agent",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "flash_agent_1795024077488.timeout",
+      "node_id": "flash_agent_1795024077488",
+      "field_path": "timeout",
+      "field_type": "number",
+      "label": "Flash Agent: Timeout",
+      "description": "Override timeout for Flash Agent",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "flash_agent_1795024077488.connectorId",
+      "node_id": "flash_agent_1795024077488",
+      "field_path": "connectorId",
+      "field_type": "string",
+      "label": "Flash Agent: Connectorid",
+      "description": "Override connectorid for Flash Agent",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "flash_agent_1795024077488.system_prompt",
+      "node_id": "flash_agent_1795024077488",
+      "field_path": "system_prompt",
+      "field_type": "textarea",
+      "label": "Flash Agent: System Prompt",
+      "description": "Override system prompt for Flash Agent",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
+    },
+    {
+      "field_id": "flash_agent_1795024077488.heartbeat_enabled",
+      "node_id": "flash_agent_1795024077488",
+      "field_path": "heartbeat_enabled",
+      "field_type": "boolean",
+      "label": "Flash Agent: Heartbeat Enabled",
+      "description": "Override heartbeat enabled for Flash Agent",
+      "required": false,
+      "default_value": null,
+      "validation": {},
+      "is_input": false
     }
-  ],
-  "version": "1.0"
+  ]
 },
   capabilities: {
   "schedulable": true,
-  "hasHITLAgents": true,
-  "specializedAgentNodes": [
-    "mcp_agent_1788971702594"
-  ]
+  "hasHITLAgents": false,
+  "specializedAgentNodes": []
 },
 };
 // <BYTEFLOW_CONFIG_END>
@@ -260,7 +493,7 @@ export function registerWorkflowConfigs(configs: Array<Omit<ByteflowConfig, 'api
   // not crash the whole app at import time.
   const list = Array.isArray(configs)
     ? configs
-    : configs && typeof configs === 'object' ? (Object.values(configs) as Array<Omit<ByteflowConfig, 'apiKey' | 'apiUrl' | 'projectId' | 'generationVersion'>>) : [];
+    : configs && typeof configs === 'object' ? Object.values(configs) : [];
   for (const config of list) {
     linkedWorkflows.set(config.workflowId, { ...config,
       apiKey: BYTEFLOW_CONFIG.apiKey, apiUrl: BYTEFLOW_CONFIG.apiUrl,

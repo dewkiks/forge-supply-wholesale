@@ -430,6 +430,15 @@ export function useWorkflowProgress(configOverride?: Partial<ReturnType<typeof g
           }
           return updated;
         });
+        // The engine reports a stopped run as workflow_completed with an error status.
+        if (data.status === 'error' || data.status === 'failed') {
+          setResult({
+            success: false,
+            outputs: ((data.result || {}) as Record<string, unknown>),
+            error: (data.error || data.message || 'Workflow failed') as string,
+          });
+          break;
+        }
         // Set result - aggregate outputs from nodeStates if not provided in event
         {
           const eventOutputs = (data.result || data.data || data.outputs) as Record<string, unknown>;
@@ -1281,7 +1290,9 @@ export function useWorkflowProgress(configOverride?: Partial<ReturnType<typeof g
         `${config.apiUrl}/mcp/hitl/answer/${questionId}`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          // The ByteFlow key authenticates the answer as the workflow owner
+          // (the backend's HITL_V2 mode rejects unauthenticated answers).
+          headers: buildExecuteHeaders(),
           body: JSON.stringify({ answer }),
         }
       );
@@ -1308,7 +1319,7 @@ export function useWorkflowProgress(configOverride?: Partial<ReturnType<typeof g
     } catch (err) {
       console.error('❌ HITL answer submission error:', err);
     }
-  }, [config]);
+  }, [config, buildExecuteHeaders]);
 
   // Get current pending HITL question (first one found)
   const pendingHITLQuestion = useMemo(() => {
